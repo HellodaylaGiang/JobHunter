@@ -1,6 +1,7 @@
 package vn.hoidanit.jobhunter.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.hoidanit.jobhunter.domain.User;
@@ -15,15 +16,11 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/user/create")
-    public String createUser() {
-        User u = new User();
-        u.setEmail("hoidanit@gnail.com");
-        u.setName("eric");
-        u.setPassword("123456");
+    @PostMapping("/user/create")
+    public User createUser(@RequestBody User postManUser) {
 
-        this.userService.saveUser(u);
+        User u = this.userService.saveUser(postManUser);
 
-        return "create user";
+        return u;
     }
 }
