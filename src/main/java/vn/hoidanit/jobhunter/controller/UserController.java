@@ -2,6 +2,8 @@ package vn.hoidanit.jobhunter.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.hoidanit.jobhunter.domain.User;
 import vn.hoidanit.jobhunter.service.UserService;
+import vn.hoidanit.jobhunter.service.error.IdInvalidException;
 
 @RestController
 public class UserController {
@@ -22,35 +25,38 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/user")
-    public User createUser(@RequestBody User postManUser) {
+    @PostMapping("/users")
+    public ResponseEntity<User> createUser(@RequestBody User postManUser) {
 
         User u = this.userService.saveUser(postManUser);
 
-        return u;
+        return ResponseEntity.status(HttpStatus.CREATED).body(u);
     }
 
-    @DeleteMapping("/user/{id}")
-    public String deleteUser(@PathVariable("id") long id) {
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable("id") long id) throws IdInvalidException {
+        if (id >= 1500) {
+            throw new IdInvalidException("Id lon hon 1500");
+        }
         this.userService.deleteUser(id);
-        return "success";
+        return ResponseEntity.status(HttpStatus.OK).body("postmanuser");
     }
 
-    @GetMapping("/user/{id}")
-    public User fetchUserById(@PathVariable("id") long id) {
+    @GetMapping("/users/{id}")
+    public ResponseEntity<User> fetchUserById(@PathVariable("id") long id) {
         User u = this.userService.getUser(id);
-        return u;
+        return ResponseEntity.status(HttpStatus.OK).body(u);
     }
 
-    @GetMapping("/user")
-    public List<User> fetchAllUser() {
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> fetchAllUser() {
         List<User> l = this.userService.getAllUser();
-        return l;
+        return ResponseEntity.status(HttpStatus.OK).body(l);
     }
 
-    @PutMapping("/user")
-    public User updateUser(@RequestBody User postManUser) {
+    @PutMapping("/users")
+    public ResponseEntity<User> updateUser(@RequestBody User postManUser) {
         User u = this.userService.updateUser(postManUser);
-        return u;
+        return ResponseEntity.ok(u);
     }
 }
