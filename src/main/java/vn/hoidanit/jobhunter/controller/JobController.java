@@ -77,6 +77,7 @@ public class JobController {
     }
 
     @GetMapping("/jobs")
+    @ApiMessage("Get all job")
     public ResponseEntity<ResultPaginationDTO> getAllJOb(
             @Filter Specification<Job> spec,
             Pageable pageable) {
