@@ -39,8 +39,8 @@ public class CompanyService {
         ResultPaginationDTO r = new ResultPaginationDTO();
         ResultPaginationDTO.Meta mt = new ResultPaginationDTO.Meta();
 
-        mt.setPage(p.getNumber() + 1);
-        mt.setPageSize(p.getSize());
+        mt.setPage(pageable.getPageNumber() + 1);
+        mt.setPageSize(pageable.getPageSize());
 
         mt.setPages(p.getTotalPages());
         mt.setTotal(p.getTotalElements());

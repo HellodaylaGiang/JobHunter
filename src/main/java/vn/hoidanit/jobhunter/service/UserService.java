@@ -119,14 +119,13 @@ public class UserService {
         ResultPaginationDTO rs = new ResultPaginationDTO();
         ResultPaginationDTO.Meta mt = new ResultPaginationDTO.Meta();
 
-        mt.setPage(page.getNumber() + 1);
-        mt.setPageSize(page.getSize());
+        mt.setPage(pageable.getPageNumber() + 1);
+        mt.setPageSize(pageable.getPageSize());
 
         mt.setPages(page.getTotalPages());
         mt.setTotal(page.getTotalElements());
 
         rs.setMeta(mt);
-        rs.setResult(page.getContent());
 
         List<ResUserDTO> listUser = page.getContent()
                 .stream().map(item -> new ResUserDTO(
