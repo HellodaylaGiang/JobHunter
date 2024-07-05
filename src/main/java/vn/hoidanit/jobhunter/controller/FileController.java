@@ -21,7 +21,6 @@ import vn.hoidanit.jobhunter.util.error.StorageException;
 
 @RestController
 @RequestMapping("/api/v1")
-
 public class FileController {
 
     @Value("${hoidanit.upload-file.base-uri}")
@@ -36,22 +35,21 @@ public class FileController {
     @PostMapping("/files")
     @ApiMessage("Upload single file")
     public ResponseEntity<ResUploadFileDTO> upload(
-
             @RequestParam(name = "file", required = false) MultipartFile file,
-            @RequestParam("folder") String folder) throws URISyntaxException, IOException, StorageException {
+            @RequestParam("folder") String folder
 
+    ) throws URISyntaxException, IOException, StorageException {
+        // skip validate
         if (file == null || file.isEmpty()) {
-            throw new StorageException("File is empty. Please upload a file");
+            throw new StorageException("File is empty. Please upload a file.");
         }
-
         String fileName = file.getOriginalFilename();
         List<String> allowedExtensions = Arrays.asList("pdf", "jpg", "jpeg", "png", "doc", "docx");
         boolean isValid = allowedExtensions.stream().anyMatch(item -> fileName.toLowerCase().endsWith(item));
 
         if (!isValid) {
-            throw new StorageException("Invalid file extension. only allow " + allowedExtensions.toString());
+            throw new StorageException("Invalid file extension. only allows " + allowedExtensions.toString());
         }
-
         // create a directory if not exist
         this.fileService.createDirectory(baseURI + folder);
 
