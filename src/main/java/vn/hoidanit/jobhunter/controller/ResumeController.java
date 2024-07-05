@@ -88,7 +88,7 @@ public class ResumeController {
             throw new IdInvalidException("Resume với id = " + id + " không tồn tại");
         }
 
-        return ResponseEntity.ok().body(this.resumeService.getSume(r.get()));
+        return ResponseEntity.ok().body(this.resumeService.getResume(r.get()));
     }
 
     @GetMapping("/resumes")

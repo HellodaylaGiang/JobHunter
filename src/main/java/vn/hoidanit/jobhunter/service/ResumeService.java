@@ -83,7 +83,7 @@ public class ResumeService {
         return this.resumeRepository.findById(id);
     }
 
-    public ResFetchResumeByIdDTO getSume(Resume resume) {
+    public ResFetchResumeByIdDTO getResume(Resume resume) {
         ResFetchResumeByIdDTO res = new ResFetchResumeByIdDTO();
 
         res.setId(resume.getId());
@@ -95,6 +95,9 @@ public class ResumeService {
         res.setUpdatedAt(resume.getUpdatedAt());
         res.setUpdatedBy(resume.getUpdatedBy());
 
+        if (resume.getJob() != null) {
+            res.setCompanyName(resume.getJob().getCompany().getName());
+        }
         res.setUser(new ResFetchResumeByIdDTO.UserResume(resume.getUser().getId(), resume.getUser().getName()));
         res.setJob(new ResFetchResumeByIdDTO.JobResume(resume.getJob().getId(), resume.getJob().getName()));
 
@@ -116,7 +119,7 @@ public class ResumeService {
         rs.setMeta(mt);
 
         List<ResFetchResumeByIdDTO> listResume = pageUser.getContent()
-                .stream().map(item -> this.getSume(item))
+                .stream().map(item -> this.getResume(item))
                 .collect(Collectors.toList());
 
         rs.setResult(listResume);
