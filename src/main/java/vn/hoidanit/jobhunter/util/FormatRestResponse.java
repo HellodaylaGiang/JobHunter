@@ -13,7 +13,7 @@ import vn.hoidanit.jobhunter.domain.response.RestResponse;
 import vn.hoidanit.jobhunter.util.annotation.ApiMessage;
 
 @ControllerAdvice
-public class FormatRestResponse implements ResponseBodyAdvice {
+public class FormatRestResponse implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(MethodParameter returnType, Class converterType) {
@@ -21,7 +21,8 @@ public class FormatRestResponse implements ResponseBodyAdvice {
     }
 
     @Override
-    public Object beforeBodyWrite(Object body,
+    public Object beforeBodyWrite(
+            Object body,
             MethodParameter returnType,
             MediaType selectedContentType,
             Class selectedConverterType,
@@ -37,16 +38,13 @@ public class FormatRestResponse implements ResponseBodyAdvice {
             return body;
         }
 
-        // case error
         if (status >= 400) {
-            res.setError("CALL API FAILED");
-            res.setMessage(body);
+            return body;
         } else {
             res.setData(body);
             ApiMessage message = returnType.getMethodAnnotation(ApiMessage.class);
-            res.setMessage(message != null ? message.value() : "cALL API SUCCESS");
+            res.setMessage(message != null ? message.value() : "CALL API SUCCESS");
         }
-        //
 
         return res;
     }

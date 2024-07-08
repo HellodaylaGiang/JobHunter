@@ -118,6 +118,7 @@ public class ResumeService {
 
         rs.setMeta(mt);
 
+        // mảng chứa id
         List<ResFetchResumeByIdDTO> listResume = pageUser.getContent()
                 .stream().map(item -> this.getResume(item))
                 .collect(Collectors.toList());
