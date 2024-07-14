@@ -113,4 +113,8 @@ public class SubscriberService {
         }
     }
 
+    public Subscriber findByEmail(String email) {
+        return this.subscriberRepository.findByEmail(email);
+    }
+
 }
