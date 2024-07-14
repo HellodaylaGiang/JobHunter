@@ -14,7 +14,7 @@ import vn.hoidanit.jobhunter.domain.Role;
 import vn.hoidanit.jobhunter.domain.User;
 import vn.hoidanit.jobhunter.service.UserService;
 import vn.hoidanit.jobhunter.util.SecurityUtil;
-import vn.hoidanit.jobhunter.util.error.IdInvalidException;
+import vn.hoidanit.jobhunter.util.error.PermissionException;
 
 public class PermissionInterceptor implements HandlerInterceptor {
 
@@ -23,6 +23,9 @@ public class PermissionInterceptor implements HandlerInterceptor {
 
     @Override
     @Transactional
+    // Khi query lấy role thì ko có permission do dùng fetch.lazy
+    // cần query xuống database một lần nữa để lấy permission
+    // @Transactional để vẫn giữ phiên đăng nhập, 2 lần query
     public boolean preHandle(
             HttpServletRequest request,
             HttpServletResponse response, Object handler)
@@ -50,10 +53,10 @@ public class PermissionInterceptor implements HandlerInterceptor {
                             && item.getMethod().equals(httpMethod));
 
                     if (isAllow == false) {
-                        throw new IdInvalidException("Bạn không có quyền truy cập endpoint này.");
+                        throw new PermissionException("Bạn không có quyền truy cập endpoint này.");
                     }
                 } else {
-                    throw new IdInvalidException("Bạn không có quyền truy cập endpoint này.");
+                    throw new PermissionException("Bạn không có quyền truy cập endpoint này.");
                 }
             }
         }
