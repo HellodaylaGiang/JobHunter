@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.hoidanit.jobhunter.service.EmailService;
+import vn.hoidanit.jobhunter.service.SubscriberService;
 import vn.hoidanit.jobhunter.util.annotation.ApiMessage;
 
 @RestController
@@ -12,18 +13,24 @@ import vn.hoidanit.jobhunter.util.annotation.ApiMessage;
 public class EmailController {
 
     private final EmailService emailService;
+    private final SubscriberService subscriberService;
 
-    public EmailController(EmailService emailService) {
+    public EmailController(EmailService emailService,
+            SubscriberService subscriberService) {
         this.emailService = emailService;
+        this.subscriberService = subscriberService;
     }
 
     @GetMapping("/email")
     @ApiMessage("Send simple email")
+    // set up cron (scheduled)
+    // @Scheduled(cron = "*/30 * * * * *")
+    // @Transactional
     public String sendSimpleEmail() {
         // this.emailService.sendEmailSync("giangtrinh107@gmail.com", "Test send email",
         // "<h1><b>hello</b></h1>", false,
         // true);
-        this.emailService.sendEmailFromTemplateSync("giangtrinh107@gmail.com", "test send email", "job");
+        this.subscriberService.sendSubscribersEmailJobs();
         return "ok";
     }
 
