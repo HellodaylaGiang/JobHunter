@@ -29,6 +29,7 @@ import vn.hoidanit.jobhunter.util.error.IdInvalidException;
 @RestController
 @RequestMapping("/api/v1")
 public class JobController {
+
     private JobService jobService;
 
     public JobController(JobService jobService) {
@@ -73,6 +74,7 @@ public class JobController {
         if (!currentJob.isPresent()) {
             throw new IdInvalidException("Job not found");
         }
+
         return ResponseEntity.ok().body(currentJob.get());
     }
 
